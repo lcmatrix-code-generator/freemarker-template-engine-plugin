@@ -1,0 +1,5 @@
+{
+  "name": "freemarker engine",
+  "class": "top.lcmatrix.util.codegenerator.plugin.freemarker.FreemarkerPlugin",
+  "version": 1.0
+}
