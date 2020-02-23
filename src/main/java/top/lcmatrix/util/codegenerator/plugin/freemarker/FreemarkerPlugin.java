@@ -37,6 +37,7 @@ public class FreemarkerPlugin extends AbstractTemplateEnginePlugin {
                 template = configuration.getTemplate(s);
             } catch (IOException e) {
                 getLogger().error("template load error.", e);
+                throw new RuntimeException("template load error.", e);
             }
         }
         if(template == null){
@@ -48,8 +49,8 @@ public class FreemarkerPlugin extends AbstractTemplateEnginePlugin {
             return stringWriter.toString();
         } catch (TemplateException | IOException e) {
             getLogger().error("apply template error.", e);
+            throw new RuntimeException("apply template error.", e);
         }
-        return null;
     }
 
     @Override
@@ -67,6 +68,7 @@ public class FreemarkerPlugin extends AbstractTemplateEnginePlugin {
                 template = configuration.getTemplate(templateId);
             } catch (IOException e) {
                 getLogger().error("template load error.", e);
+                throw new RuntimeException("template load error.", e);
             }
         }
         if(template == null){
@@ -78,7 +80,7 @@ public class FreemarkerPlugin extends AbstractTemplateEnginePlugin {
             return stringWriter.toString();
         } catch (TemplateException | IOException e) {
             getLogger().error("apply template error.", e);
+            throw new RuntimeException("apply template error.", e);
         }
-        return null;
     }
 }
