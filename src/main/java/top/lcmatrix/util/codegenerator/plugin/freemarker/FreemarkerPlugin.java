@@ -7,9 +7,10 @@ import freemarker.template.TemplateException;
 import org.apache.commons.io.FileUtils;
 import top.lcmatrix.util.codegenerator.common.plugin.AbstractTemplateEnginePlugin;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 
 public class FreemarkerPlugin extends AbstractTemplateEnginePlugin {
@@ -24,7 +25,7 @@ public class FreemarkerPlugin extends AbstractTemplateEnginePlugin {
     }
 
     @Override
-    public String apply(String s, Object model) {
+    public byte[] apply(String s, Object model) {
         Template template = null;
         try {
             template = configuration.getTemplate(s);
@@ -43,10 +44,12 @@ public class FreemarkerPlugin extends AbstractTemplateEnginePlugin {
         if(template == null){
             return null;
         }
-        StringWriter stringWriter = new StringWriter();
+        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(byteOutputStream);
         try {
-            template.process(model, stringWriter);
-            return stringWriter.toString();
+            template.process(model, outputStreamWriter);
+            outputStreamWriter.flush();
+            return byteOutputStream.toByteArray();
         } catch (TemplateException | IOException e) {
             getLogger().error("apply template error.", e);
             throw new RuntimeException("apply template error.", e);
@@ -54,7 +57,7 @@ public class FreemarkerPlugin extends AbstractTemplateEnginePlugin {
     }
 
     @Override
-    public String apply(File templateFile, Object model) {
+    public byte[] apply(File templateFile, Object model) {
         String templateId = templateFile.toURI().toString();
         Template template = null;
         try {
@@ -74,10 +77,12 @@ public class FreemarkerPlugin extends AbstractTemplateEnginePlugin {
         if(template == null){
             return null;
         }
-        StringWriter stringWriter = new StringWriter();
+        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(byteOutputStream);
         try {
-            template.process(model, stringWriter);
-            return stringWriter.toString();
+            template.process(model, outputStreamWriter);
+            outputStreamWriter.flush();
+            return byteOutputStream.toByteArray();
         } catch (TemplateException | IOException e) {
             getLogger().error("apply template error.", e);
             throw new RuntimeException("apply template error.", e);
