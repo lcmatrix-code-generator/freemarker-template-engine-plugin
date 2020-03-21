@@ -7,7 +7,9 @@ import freemarker.template.TemplateException;
 import org.apache.commons.io.FileUtils;
 import top.lcmatrix.util.codegenerator.common.plugin.AbstractTemplateEnginePlugin;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.nio.charset.Charset;
 
 public class FreemarkerPlugin extends AbstractTemplateEnginePlugin {
@@ -72,12 +74,10 @@ public class FreemarkerPlugin extends AbstractTemplateEnginePlugin {
         if(template == null){
             return null;
         }
-        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
-        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(byteOutputStream);
+        StringWriter sw = new StringWriter();
         try {
-            template.process(model, outputStreamWriter);
-            outputStreamWriter.flush();
-            return byteOutputStream.toByteArray();
+            template.process(model, sw);
+            return sw.toString().getBytes("UTF-8");
         } catch (TemplateException | IOException e) {
             getLogger().error("apply template error.", e);
             throw new RuntimeException("apply template error.", e);
